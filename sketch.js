@@ -1,5 +1,6 @@
-var helicopterImg, helicopterSprite, packageSprite,packageImg, bgImg, packageBody;
-var boxBottomBody, boxLeftBody, boxRightBody;
+var helicopterImg, bgImg;
+var helicopterSprite, packageSprite;
+var packageBody,boxBottomBody, boxLeftBody, boxRightBody;
 
 const Engine = Matter.Engine;
 const World = Matter.World;
@@ -9,7 +10,6 @@ const Bodies = Matter.Bodies;
 function preload()
 {
 	helicopterImg=loadImage("helicopter.png")
-	packageImg=loadImage("package.png")
 	bgImg=loadImage("bg.png")
 }
 
@@ -19,8 +19,8 @@ function setup() {
 	engine = Engine.create();
 	world = engine.world;
 
-	packageSprite=createSprite(width/2, 50, 10,10);
-	packageSprite.addImage(packageImg)
+	packageSprite=createSprite(width/2, 50,200,200);
+	packageSprite.shapeColor = "yellow"
 	packageSprite.scale=0.2
 
 	helicopterSprite=createSprite(width/2, 100, 10,10);
@@ -29,34 +29,33 @@ function setup() {
 
 	engine = Engine.create();
 	world = engine.world;
-
-	packageBody = Bodies.circle(width/2 , 100 , 25 , {restitution:0.4, isStatic:true});
-	World.add(world, packageBody);
-
+	
 	boxBottomBody = new Box(400, 610, 200,20);
  	boxLeftBody = new Box(310, 570, 20,100);
- 	boxRightBody = new Box(490, 570, 20,100);  
+ 	boxRightBody = new Box(490, 570, 20,100);
+
+	packageBody = Bodies.circle(width/2 , 100 , 20 , {restitution:0.4, isStatic:true});
+	World.add(world, packageBody);
+
 }
 
 
 function draw() {
-	
-	rectMode(CENTER);
 	Engine.update(engine);
 	background(bgImg);
 	
 	packageSprite.x= packageBody.position.x 
 	packageSprite.y= packageBody.position.y 
-	
-  	boxBottomBody.display();
-	boxLeftBody.display();
+
 	boxRightBody.display();
+	boxLeftBody.display();
+	boxBottomBody.display();
 
 	drawSprites(); 
 }
 
 function keyPressed() {
-
+	
 	if (keyCode === LEFT_ARROW) {
 
 		helicopterSprite.x=helicopterSprite.x-20;    
@@ -72,7 +71,8 @@ function keyPressed() {
 	  }
 	  
 	if (keyCode === DOWN_ARROW) {
+	   //make the static property of packageBody as false
 	   Matter.Body.setStatic(packageBody,false);
-	 }
+	}
 }
   
